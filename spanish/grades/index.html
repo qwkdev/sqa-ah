@@ -42,6 +42,11 @@
 		body {
 			margin: 0;
 			background: #141415;
+
+			overflow-x: hidden;
+		}
+		body::-webkit-scrollbar {
+			display: none;
 		}
 		#top {
 			--corner: 2vw;
@@ -334,6 +339,9 @@
 			position: relative;
 			height: min-content;
 			overflow-x: scroll;
+		}
+		#table-wrap::-webkit-scrollbar {
+			display: none;
 		}
 		#main table {
 			--corner: 2vw;
