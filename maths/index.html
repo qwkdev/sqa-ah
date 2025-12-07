@@ -104,10 +104,54 @@
 			margin: 0;
 			margin-left: var(--side);
 			margin-top: calc(2.7 * var(--u));
+			margin-bottom: calc(1.5 * var(--u));
 		}
 		#main h2 a {
 			white-space: nowrap;
 		}
+
+		#contributors {
+			width: calc(100% - var(--side));
+			margin-left: var(--side);
+			gap: calc(1.5 * var(--u));
+			display: flex;
+			flex-wrap: wrap;
+		}
+		#contributors div {
+			--height: calc(5 * var(--u));
+			--br: calc(.3 * var(--height));
+			background: var(--glass-bg);
+			border: calc(.2 * var(--u)) solid var(--glass-border);
+			border-radius: var(--br);
+			width: max-content;
+			height: calc(var(--height) + .3 * var(--u));
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			transition: .2s;
+		}
+		#contributors div img {
+			height: var(--height);
+			width: var(--height);
+			border-radius: var(--br);
+		}
+		#contributors div a, #contributors div p {
+			margin: 0 calc(.25 * var(--height));
+			font-size: calc(.5 * var(--height));
+			font-family: Arial;
+			color: #fff;
+		}
+		#contributors div a::selection, #contributors div p::selection {
+			background: #fff7;
+		}
+		#contributors div:hover {
+			background: var(--glass-bg-hover);
+			transform: scale(1.05);
+		}
+		#contributors[hidden] {
+			display: none;
+		}
+
 		#fade-wrap {
 			margin-top: calc(2.7 * var(--u));
 			position: relative;
@@ -631,7 +675,14 @@
 			<span id="visits">Loading visits...</span>
 		</p>
 
-		<h2>Extra: <a href="/maths/grades" target="_blank">Grade Boundaries</a>, <a href="/maths/reports" target="_blank">Course Reports</a></h2>
+		<h2>Extra: <a href="/maths/grades">Grade Boundaries</a>, <a href="/maths/reports">Course Reports</a></h2>
+
+		<div id="contributors" hidden>
+			<div>
+				<p>Contributors:</p>
+			</div>
+
+		</div>
 
 		<div id="fade-wrap"><main id="table-wrap" aria-label="Past Paper Section">
 			<table aria-label="Past Papers">
@@ -641,7 +692,7 @@
 	</section>
 	
 	<footer id="footer">
-		<a id="contact" aria-label="Contact Form" href="https://qwk.pythonanywhere.com/contact?ref=SQA" target="_blank">Contact</a>
+		<a id="contact" aria-label="Contact Form" href="https://contact.qwk.zone/SQA" target="_blank">Contact</a>
 		<div><h2>SQA.MY is not affiliated with, endorsed by, or associated with the Scottish Qualifications Authority</h2></div>
 		<div><h3>Made by <span><a class="underlined" href="https://qwkdev.github.io" target="_blank" aria-label="Site Author">qwk<span class="underline"></span></a></span></h3></div>
 	</footer>
