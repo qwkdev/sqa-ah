@@ -739,11 +739,9 @@
 		})
 			.then(response => response.json())
 			.then(data => {
-				document.getElementById('visits').innerText = `This page has been visited ${data['visits']} times`;
 				if (data['session']) setSession(data['session']);
 			})
 			.catch(error => {
-				document.getElementById('visits').innerText = `Couldn't load visits`;
 				console.error('Error fetching visits:', error)
 			});
 	</script>
