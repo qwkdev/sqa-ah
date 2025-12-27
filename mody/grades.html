@@ -747,10 +747,37 @@
 		}
 		qChatEmbed.addEventListener('load', e => qChat(false));
 
-		fetch('https://qwk.pythonanywhere.com/l/sqa-ah-mody-grades', { method: 'GET' })
+		const QT_SESSION = 'qt-session';
+		const SESSION_TIMEOUT = 30 * 60;
+		function setSession(session) {
+			document.cookie = `${QT_SESSION}=${session};Domain=.sqa.my;Path=/;Max-Age=${SESSION_TIMEOUT};SameSite=Lax`;
+		}
+
+		function getSession() {
+			let session = document.cookie
+				.split('; ')
+				.find(c => c.startsWith(QT_SESSION+'='))
+				?.split('=')[1];
+			
+			if (!session) return null;
+
+			setSession(session);
+			return session;
+		}
+
+		fetch('https://qtrack.pythonanywhere.com/visit/sqa-ah-mody-grades', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				's': getSession(),
+				'o': window.location.href || null,
+				'r': document.referrer || null
+			})
+		})
 			.then(response => response.json())
 			.then(data => {
 				document.getElementById('visits').innerText = `This page has been visited ${data['visits']} times`;
+				if (data['session']) setSession(data['session']);
 			})
 			.catch(error => {
 				document.getElementById('visits').innerText = `Couldn't load visits`;
