@@ -747,7 +747,13 @@ button.qchat-toggle {
 		qChatWrapper.hidden = show ? false : true;
 		qChatEmbed.contentWindow.postMessage({ type: 'control-sync', sync: show ? true : false }, 'https://qchat.lol');
 	}
-	qChatEmbed.addEventListener('load', e => qChat(false));
+	let qChatLoaded = false;
+	qChatEmbed.addEventListener('load', e => {
+		if (!qChatLoaded) {
+			qChatLoaded = true;
+			qChat(false);
+		}
+	});
 </script>
 <script>
 	const QT_SESSION = 'qt-session';
