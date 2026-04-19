@@ -736,6 +736,7 @@ button.qchat-toggle {
 		if (!qChatLoaded) {
 			qChatLoaded = true;
 			qChat(false);
+			setTimeout(() => qChat(false), 50);
 		}
 	});
 </script>
