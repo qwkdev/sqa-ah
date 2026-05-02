@@ -325,6 +325,9 @@ body::-webkit-scrollbar {
 #top #top-results a:hover {
 	background: var(--glass-bg-hover2);
 }
+#top #top-results a.focus {
+	background: var(--glass-bg-hover);
+}
 #top #top-results a b {
 	font-weight: 500;
 	background: #fff3;
@@ -730,6 +733,7 @@ button.qchat-toggle {
 	const topResults = document.getElementById('top-results');
 	function toggleSearch() {
 		setTimeout(() => {
+			fuseUpdate(topResults, { target: topQuery });
 			topNav.dataset.search = topNav.dataset.search == 0 ? 1 : 0;
 			if (topNav.dataset.search) setTimeout(() => topQuery.focus(), 50);
 		}, 50);
@@ -828,9 +832,8 @@ button.qchat-toggle {
 
 	const levelsd = {"n5": "nat5", "h": "higher", "ah": "ah"};
 	function fuseUpdate(resultList, event) {
-		const x = normalizeInput(event.target.value || '');
-		console.log(x);
-		const results = fuse.search(x);
+		const query = normalizeInput(event?.target?.value || '');
+		const results = fuse.search(query);
 		
 		resultList.innerHTML = '';
 		if (results.length > 0) {
@@ -856,13 +859,47 @@ button.qchat-toggle {
 
 				subject.innerHTML = `${ele.item.level.toUpperCase()} ${resultName}<span>${Math.round((normal(ele.score) / total) * 100)}%</span>`;
 				resultList.appendChild(subject);
-			})
+			});
+
+			resultList.children[0]?.classList.add('focus');
 		} else {
 			resultList.hidden = true;
 		}
 	}
+	function fuseMoveFocus(resultList, delta) {
+		const children = Array.from(resultList.children);
+		if (!children) return
+
+		let current = children.findIndex(e => e.classList.contains('focus'));
+		if (current === -1) {
+			children[0].classList.add('focus');
+			return
+		}
+
+		children[current].classList.remove('focus');
+		const focus = children.at(current + delta >= children.length ? 0 : current + delta);
+		focus.classList.add('focus');
+
+		const resultRect = resultList.getBoundingClientRect();
+		const focusRect = focus.getBoundingClientRect();
+
+		if (focusRect.top < resultRect.top || focusRect.bottom > resultRect.bottom) {
+			resultList.scrollTo({
+				top: delta === 1
+					? focusRect.bottom - resultRect.top + resultList.scrollTop - resultRect.height
+					: focusRect.top - resultRect.top + resultList.scrollTop,
+				behavior: 'smooth'
+			});
+		}
+	}
 
 	topQuery.addEventListener('input', e => fuseUpdate(topResults, e));
+	topQuery.addEventListener('keydown', e => {
+		if ([40, 39].includes(e.keyCode)) fuseMoveFocus(topResults, 1);
+		else if ([38, 37].includes(e.keyCode)) fuseMoveFocus(topResults, -1);
+		else if (e.keyCode === 27) toggleSearch();
+		else if (e.keyCode === 13) topResults.querySelector('.focus')?.click();
+	})
 </script>
 </body>
 </html>
