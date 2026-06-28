@@ -740,7 +740,7 @@ dialog {
 		document.getElementById(m).close();
 	}
 
-	if (document.referrer?.toLowerCase()?.includes('sqa.my')) {
+	if (document.referrer?.toLowerCase()?.includes('sqa.my') || window.location?.search?.slice(1)?.includes('old')) {
 		document.getElementById('new-domain').showModal();
 	}
 
